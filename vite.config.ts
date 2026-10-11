@@ -4,10 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 export default defineConfig({
+  base: '/loan-graph/',
   plugins: [react(), tailwindcss()],
   resolve: {
-    alias: {
-      '@': path.resolve(import.meta.dirname, './src'),
-    },
+    alias: { '@': path.resolve(import.meta.dirname, './src') },
   },
 })

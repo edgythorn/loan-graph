@@ -1,19 +1,16 @@
 <!doctype html>
 <html lang="ru">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/loan-graph/favicon.svg" />
 
     <title>Калькулятор досрочного погашения кредита и ипотеки</title>
-    <meta
-      name="description"
-      content="Рассчитайте график платежей с досрочным погашением: разовым или ежемесячным, со снижением платежа или сокращением срока. Бесплатно, без регистрации."
-    />
-    <meta
-      name="keywords"
-      content="калькулятор досрочного погашения, досрочное погашение кредита, досрочное погашение ипотеки, кредитный калькулятор с досрочным погашением, график платежей"
-    />
+    <meta name="description"
+        content="Рассчитайте график платежей с досрочным погашением: разовым или ежемесячным, со снижением платежа или сокращением срока. Бесплатно, без регистрации." />
+    <meta name="keywords"
+        content="калькулятор досрочного погашения, досрочное погашение кредита, досрочное погашение ипотеки, кредитный калькулятор с досрочным погашением, график платежей" />
     <link rel="canonical" href="https://edgythorn.github.io/loan-graph/" />
 
     <meta name="theme-color" content="#ffffff" />
@@ -23,10 +20,8 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ru_RU" />
     <meta property="og:title" content="Калькулятор досрочного погашения кредита и ипотеки" />
-    <meta
-      property="og:description"
-      content="Рассчитайте график платежей с досрочным погашением. Снижение платежа или сокращение срока."
-    />
+    <meta property="og:description"
+        content="Рассчитайте график платежей с досрочным погашением. Снижение платежа или сокращение срока." />
     <meta property="og:url" content="https://edgythorn.github.io/loan-graph/" />
     <meta property="og:site_name" content="Loan Graph" />
 
@@ -49,9 +44,21 @@
         "description": "Калькулятор графика платежей с досрочным погашением: разовым или ежемесячным, со снижением платежа или сокращением срока."
       }
     </script>
-  </head>
-  <body>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNP8MJW4RF"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-LNP8MJW4RF');
+    </script>
+</head>
+
+<body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-  </body>
+</body>
+
 </html>

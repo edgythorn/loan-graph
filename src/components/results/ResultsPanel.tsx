@@ -4,8 +4,11 @@ import { ScheduleTable } from './ScheduleTable'
 import { Summary } from './Summary'
 
 export function ResultsPanel() {
-  const session = useCalcStore((s) => s.sessions.find((x) => x.id === s.activeId))!
-  const result = session.result
+  const session = useCalcStore((s) =>
+    s.sessions.find((x) => x.id === s.activeId),
+  )
+
+  if (!session) return null
 
   return (
     <Tabs defaultValue="schedule" className="mt-4">
@@ -14,10 +17,10 @@ export function ResultsPanel() {
         <TabsTrigger value="summary">Сводка</TabsTrigger>
       </TabsList>
       <TabsContent value="schedule">
-        <ScheduleTable result={result} />
+        <ScheduleTable result={session.result} />
       </TabsContent>
       <TabsContent value="summary">
-        <Summary result={result} params={session.params} />
+        <Summary result={session.result} params={session.params} />
       </TabsContent>
     </Tabs>
   )

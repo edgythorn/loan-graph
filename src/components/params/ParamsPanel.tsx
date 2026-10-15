@@ -10,18 +10,20 @@ import { EarlyInput } from './EarlyInput'
 export function ParamsPanel() {
   const session = useCalcStore((s) =>
     s.sessions.find((x) => x.id === s.activeId),
-  )!
+  )
   const updateParams = useCalcStore((s) => s.updateParams)
   const recalc = useCalcStore((s) => s.recalc)
 
-  const params = session.params
-  const minPayment = session.result?.minPayment ?? 0
+  const params = session?.params
+  const minPayment = session?.result?.minPayment ?? 0
 
-  // автопересчёт с debounce
   useEffect(() => {
+    if (!params) return
     const t = setTimeout(() => recalc(), 200)
     return () => clearTimeout(t)
   }, [params, recalc])
+
+  if (!session || !params) return null
 
   return (
     <Card className="p-4 space-y-4">

@@ -37,7 +37,12 @@ export function CalcTabs() {
           )}
         </div>
       ))}
-      <Button variant="ghost" size="sm" onClick={addSession} className="gap-1">
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => addSession()}
+        className="gap-1"
+      >
         <Plus className="h-4 w-4" />
       </Button>
     </div>

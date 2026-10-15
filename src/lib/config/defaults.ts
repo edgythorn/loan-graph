@@ -1,11 +1,11 @@
 import type { LoanParams } from '@/types/loan'
 
 export const DEFAULT_PARAMS: LoanParams = {
-  amount: 9_150_000,
-  rate: 21.9,
+  amount: 1_000_000,
+  rate: 15,
 
   termMode: 'months',
-  termMonths: 240,
+  termMonths: 60,
   firstPaymentDate: new Date(),
 
   earlyMode: 'systematic',

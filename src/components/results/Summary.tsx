@@ -6,7 +6,7 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip'
 import type { CalcResult, LoanParams } from '@/types/loan'
-import { formatMoney } from '@/lib/calc/format'
+import { formatMoney, formatMonthsAsYears } from '@/lib/calc/format'
 import { annuityPayment } from '@/lib/calc/annuity'
 
 interface Props {
@@ -45,9 +45,21 @@ export function Summary({ result, params }: Props) {
 
     const principal = params.amount
 
+    const termYears = formatMonthsAsYears(result.actualMonths) || undefined
+    const savedYears = formatMonthsAsYears(savedMonths) || undefined
+
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 p-4">
-            <Stat label="Срок" value={`${result.actualMonths} мес`} />
+            <Stat
+                label="Срок"
+                value={`${result.actualMonths} мес`}
+                sub={termYears}
+                rows={
+                    showSavedMonths
+                        ? [{ label: 'было', value: `${baseMonths} мес` }]
+                        : undefined
+                }
+            />
 
             <Stat
                 label="Сумма выплат"
@@ -75,7 +87,8 @@ export function Summary({ result, params }: Props) {
             {showSavedMonths && (
                 <Stat
                     label="Экономия месяцев"
-                    value={`${savedMonths}`}
+                    value={`${savedMonths} мес`}
+                    sub={savedYears}
                     className="text-emerald-600"
                 />
             )}
@@ -100,12 +113,13 @@ interface StatRow {
 interface StatProps {
     label: string
     value: string
+    sub?: string
     rows?: StatRow[]
     tooltip?: string
     className?: string
 }
 
-function Stat({ label, value, rows, tooltip, className }: StatProps) {
+function Stat({ label, value, sub, rows, tooltip, className }: StatProps) {
     return (
         <Card className="p-3">
             <div className="flex items-center gap-1 text-xs text-muted-foreground">
@@ -122,16 +136,19 @@ function Stat({ label, value, rows, tooltip, className }: StatProps) {
 
             <div className={`text-lg font-semibold font-mono ${className ?? ''}`}>
                 {value}
+                {sub && (
+                    <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+                        ({sub})
+                    </span>
+                )}
             </div>
 
-            {rows && (
+            {rows && rows.length > 0 && (
                 <div className="mt-2 space-y-0.5 text-xs">
-                    {rows.map((r) => (
-                        <div key={r.label} className="flex justify-between gap-2">
+                    {rows.map((r, i) => (
+                        <div key={`${r.label}-${i}`} className="flex justify-between gap-2">
                             <span className="text-muted-foreground">{r.label}</span>
-                            <span className={`font-mono ${r.className ?? ''}`}>
-                                {r.value}
-                            </span>
+                            <span className={`font-mono ${r.className ?? ''}`}>{r.value}</span>
                         </div>
                     ))}
                 </div>

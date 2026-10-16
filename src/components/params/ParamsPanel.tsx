@@ -6,6 +6,7 @@ import { useCalcStore } from '@/lib/store/useCalcStore'
 import { formatMoney } from '@/lib/calc/format'
 import { TermInput } from './TermInput'
 import { EarlyInput } from './EarlyInput'
+import { MoneyInput } from './MoneyInput'
 
 export function ParamsPanel() {
   const session = useCalcStore((s) =>
@@ -30,10 +31,9 @@ export function ParamsPanel() {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Сумма кредита / остаток</Label>
-          <Input
-            type="number"
+          <MoneyInput
             value={params.amount}
-            onChange={(e) => updateParams({ amount: Number(e.target.value) })}
+            onChange={(v) => updateParams({ amount: v })}
           />
         </div>
         <div className="space-y-2">

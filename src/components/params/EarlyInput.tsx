@@ -3,6 +3,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { EarlyMode, LoanParams, Strategy } from '@/types/loan'
 import { formatMoney } from '@/lib/calc/format'
+import { MoneyInput } from './MoneyInput'
 
 interface Props {
   params: LoanParams
@@ -74,13 +75,11 @@ export function EarlyInput({ params, minPayment, onChange }: Props) {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>Факт. платёж (в месяц)</Label>
-            <Input
-              type="number"
-              value={actual || ''}
-              onChange={(e) =>
-                onChange({ actualPayment: Number(e.target.value) || 0 })
-              }
+            <MoneyInput
+              value={actual}
+              onChange={(v) => onChange({ actualPayment: v })}
               onBlur={handleBlur}
+              placeholder={formatMoney(minPayment)}
             />
           </div>
           <div className="space-y-2">
@@ -98,10 +97,9 @@ export function EarlyInput({ params, minPayment, onChange }: Props) {
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>Сумма</Label>
-            <Input
-              type="number"
+            <MoneyInput
               value={params.onceAmount}
-              onChange={(e) => onChange({ onceAmount: Number(e.target.value) })}
+              onChange={(v) => onChange({ onceAmount: v })}
             />
           </div>
           <div className="space-y-2">

@@ -14,6 +14,7 @@ interface CalcState {
     removeSession: (id: string) => void
     setActive: (id: string) => void
     updateParams: (patch: Partial<LoanParams>) => void
+    renameSession: (id: string, name: string) => void
     recalc: () => void
 }
 
@@ -40,9 +41,9 @@ export const useCalcStore = create<CalcState>()(
             counter: 0,
 
             ensureSession: (params) => {
-                const { sessions } = get()
+                const { sessions, counter } = get()
                 if (sessions.length > 0) return
-                const next = get().counter + 1
+                const next = counter + 1
                 const session = createSession(
                     `Расчет ${next}`,
                     params ?? { ...DEFAULT_PARAMS },
@@ -89,6 +90,16 @@ export const useCalcStore = create<CalcState>()(
                 set({
                     sessions: sessions.map((s) =>
                         s.id === activeId ? { ...s, params: { ...s.params, ...patch } } : s,
+                    ),
+                })
+            },
+
+            renameSession: (id, name) => {
+                const trimmed = name.trim().slice(0, 30)
+                if (!trimmed) return
+                set({
+                    sessions: get().sessions.map((s) =>
+                        s.id === id ? { ...s, name: trimmed } : s,
                     ),
                 })
             },

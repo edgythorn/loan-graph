@@ -1,12 +1,20 @@
 import LZString from 'lz-string'
 import type { LoanParams } from '@/types/loan'
 
-/**
- * Сериализация LoanParams в сжатую строку для URL.
- * Date → UnixTime (ms), JSON → LZ → base64url.
- */
-export function encodeParams(params: LoanParams): string {
-  const packed = {
+export interface DecodedShare {
+  params: LoanParams
+  name?: string
+}
+
+/** Дефолтный паттерн имени — «Расчет N». Такие имена не шарим. */
+const DEFAULT_NAME_RE = /^Расчет \d+$/
+
+function isCustomName(name: string): boolean {
+  return !!name && !DEFAULT_NAME_RE.test(name)
+}
+
+export function encodeParams(params: LoanParams, name?: string): string {
+  const packed: Record<string, unknown> = {
     a: params.amount,
     r: params.rate,
     tm: params.termMode,
@@ -18,18 +26,18 @@ export function encodeParams(params: LoanParams): string {
     ap: params.actualPayment,
     s: params.strategy,
   }
+  if (name && isCustomName(name)) {
+    packed.n = name
+  }
   return LZString.compressToEncodedURIComponent(JSON.stringify(packed))
 }
 
-/**
- * Обратная операция. Возвращает null, если строка битая.
- */
-export function decodeParams(s: string): LoanParams | null {
+export function decodeParams(s: string): DecodedShare | null {
   try {
     const json = LZString.decompressFromEncodedURIComponent(s)
     if (!json) return null
     const p = JSON.parse(json)
-    return {
+    const params: LoanParams = {
       amount: Number(p.a) || 0,
       rate: Number(p.r) || 0,
       termMode: p.tm ?? 'months',
@@ -40,6 +48,10 @@ export function decodeParams(s: string): LoanParams | null {
       onceMonth: Number(p.om) || 1,
       actualPayment: p.ap != null ? Number(p.ap) : undefined,
       strategy: p.s ?? 'reducePayment',
+    }
+    return {
+      params,
+      name: typeof p.n === 'string' ? p.n : undefined,
     }
   } catch {
     return null
@@ -52,7 +64,7 @@ export function paramsHash(params: LoanParams): string {
 }
 
 /** Полный URL для шаринга. */
-export function buildShareUrl(params: LoanParams): string {
+export function buildShareUrl(params: LoanParams, name?: string): string {
   const base = window.location.origin + window.location.pathname
-  return `${base}?c=${encodeParams(params)}`
+  return `${base}?c=${encodeParams(params, name)}`
 }

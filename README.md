@@ -26,6 +26,8 @@ A web app for calculating loan repayment schedules with early repayments.
 - Payment schedule and summary (term, interest, savings).
 - PWA: installable, works offline.
 - Calculations are saved to `localStorage`.
+- Shareable links: encode a calculation into the URL and share it.
+- Rename tabs.
 
 ### Stack
 
@@ -107,6 +109,8 @@ MIT
 - График платежей и сводка (срок, проценты, экономия).
 - PWA: устанавливается, работает оффлайн.
 - Сохранение расчётов в `localStorage`.
+- Ссылки для шаринга: расчёт кодируется в URL и передаётся по ссылке.
+- Переименование вкладок.
 
 ### Стек
 

@@ -27,7 +27,7 @@ export function ParamsPanel() {
 
   return (
     <Card className="p-4 space-y-4">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Сумма кредита / остаток</Label>
           <Input
@@ -45,13 +45,15 @@ export function ParamsPanel() {
             onChange={(e) => updateParams({ rate: Number(e.target.value) })}
           />
         </div>
-        <div className="space-y-2">
-          <Label>Мин. платёж (расчётный)</Label>
-          <Input readOnly value={formatMoney(minPayment)} className="bg-muted" />
-        </div>
       </div>
 
       <TermInput params={params} onChange={updateParams} />
+
+      <div className="space-y-2">
+        <Label>Мин. платёж (расчётный)</Label>
+        <Input readOnly value={formatMoney(minPayment)} className="bg-muted" />
+      </div>
+
       <EarlyInput
         params={params}
         minPayment={minPayment}

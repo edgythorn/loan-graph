@@ -133,8 +133,8 @@ function Stat({
     className,
 }: StatProps) {
     return (
-        <Card className="p-2 md:p-3">
-            <div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground">
+        <Card className="p-3 md:p-4">
+            <div className="flex items-center gap-1 text-xs md:text-sm text-muted-foreground">
                 {label}
                 {tooltip && (
                     <Tooltip>
@@ -149,24 +149,24 @@ function Stat({
             </div>
 
             <div
-                className={`text-base md:text-lg font-semibold font-mono ${className ?? ''}`}
+                className={`text-lg md:text-xl font-semibold font-mono ${className ?? ''}`}
             >
                 {value}
                 {sub && (
-                    <span className="ml-1.5 text-[10px] md:text-xs font-normal text-muted-foreground">
+                    <span className="ml-1.5 text-xs md:text-sm font-normal text-muted-foreground">
                         ({sub})
                     </span>
                 )}
             </div>
 
             {previous && (
-                <div className="text-[10px] md:text-xs text-muted-foreground font-mono line-through">
+                <div className="text-xs md:text-sm text-muted-foreground font-mono line-through">
                     {previous}
                 </div>
             )}
 
             {rows && rows.length > 0 && (
-                <div className="mt-2 space-y-0.5 text-[10px] md:text-xs">
+                <div className="mt-2 space-y-0.5 text-xs md:text-sm">
                     {rows.map((r, i) => (
                         <div
                             key={`${r.label}-${i}`}
@@ -190,7 +190,7 @@ function Stat({
             )}
 
             {saved && (
-                <div className="mt-2 text-[10px] md:text-xs font-mono text-emerald-600">
+                <div className="mt-2 text-base md:text-lg font-mono text-emerald-600 font-semibold">
                     экономия {saved}
                 </div>
             )}

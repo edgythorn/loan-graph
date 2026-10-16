@@ -26,6 +26,7 @@ export function Summary({ result, params }: Props) {
     const baseMonths = params.termMonths
     const basePayment = annuityPayment(params.amount, params.rate, baseMonths)
     const baseInterest = basePayment * baseMonths - params.amount
+    const baseTotal = baseInterest + params.amount
 
     const savedInterest = baseInterest - result.totalInterest
     const savedMonths = baseMonths - result.actualMonths
@@ -46,17 +47,23 @@ export function Summary({ result, params }: Props) {
     const principal = params.amount
 
     const termYears = formatMonthsAsYears(result.actualMonths) || undefined
+    const baseYears = formatMonthsAsYears(baseMonths) || undefined
     const savedYears = formatMonthsAsYears(savedMonths) || undefined
 
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 p-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 p-3 md:gap-3 md:p-4">
             <Stat
                 label="Срок"
                 value={`${result.actualMonths} мес`}
                 sub={termYears}
-                rows={
+                previous={
                     showSavedMonths
-                        ? [{ label: 'было', value: `${baseMonths} мес` }]
+                        ? `${baseMonths} мес${baseYears ? ` (${baseYears})` : ''}`
+                        : undefined
+                }
+                saved={
+                    showSavedMonths
+                        ? `${savedMonths} мес${savedYears ? ` (${savedYears})` : ''}`
                         : undefined
                 }
             />
@@ -64,14 +71,24 @@ export function Summary({ result, params }: Props) {
             <Stat
                 label="Сумма выплат"
                 value={formatMoney(result.totalPaid)}
+                previous={showSavedInterest ? formatMoney(baseTotal) : undefined}
                 rows={[
                     { label: 'долг', value: formatMoney(principal) },
                     {
                         label: 'проценты',
                         value: formatMoney(result.totalInterest),
-                        className: 'text-destructive',
                     },
+                    ...(showSavedInterest
+                        ? [
+                              {
+                                  label: '',
+                                  value: formatMoney(baseInterest),
+                                  strike: true,
+                              },
+                          ]
+                        : []),
                 ]}
+                saved={showSavedInterest ? formatMoney(savedInterest) : undefined}
             />
 
             <Stat
@@ -83,23 +100,6 @@ export function Summary({ result, params }: Props) {
                         : undefined
                 }
             />
-
-            {showSavedMonths && (
-                <Stat
-                    label="Экономия месяцев"
-                    value={`${savedMonths} мес`}
-                    sub={savedYears}
-                    className="text-emerald-600"
-                />
-            )}
-
-            {showSavedInterest && (
-                <Stat
-                    label="Экономия процентов"
-                    value={formatMoney(savedInterest)}
-                    className="text-emerald-600"
-                />
-            )}
         </div>
     )
 }
@@ -108,25 +108,39 @@ interface StatRow {
     label: string
     value: string
     className?: string
+    strike?: boolean
 }
 
 interface StatProps {
     label: string
     value: string
     sub?: string
+    previous?: string
     rows?: StatRow[]
+    saved?: string
     tooltip?: string
     className?: string
 }
 
-function Stat({ label, value, sub, rows, tooltip, className }: StatProps) {
+function Stat({
+    label,
+    value,
+    sub,
+    previous,
+    rows,
+    saved,
+    tooltip,
+    className,
+}: StatProps) {
     return (
-        <Card className="p-3">
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <Card className="p-2 md:p-3">
+            <div className="flex items-center gap-1 text-[10px] md:text-xs text-muted-foreground">
                 {label}
                 {tooltip && (
                     <Tooltip>
-                        <TooltipTrigger render={<HelpCircle className="h-3 w-3 cursor-help" />} />
+                        <TooltipTrigger
+                            render={<HelpCircle className="h-3 w-3 cursor-help" />}
+                        />
                         <TooltipContent>
                             <p className="max-w-xs text-xs">{tooltip}</p>
                         </TooltipContent>
@@ -134,23 +148,50 @@ function Stat({ label, value, sub, rows, tooltip, className }: StatProps) {
                 )}
             </div>
 
-            <div className={`text-lg font-semibold font-mono ${className ?? ''}`}>
+            <div
+                className={`text-base md:text-lg font-semibold font-mono ${className ?? ''}`}
+            >
                 {value}
                 {sub && (
-                    <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+                    <span className="ml-1.5 text-[10px] md:text-xs font-normal text-muted-foreground">
                         ({sub})
                     </span>
                 )}
             </div>
 
+            {previous && (
+                <div className="text-[10px] md:text-xs text-muted-foreground font-mono line-through">
+                    {previous}
+                </div>
+            )}
+
             {rows && rows.length > 0 && (
-                <div className="mt-2 space-y-0.5 text-xs">
+                <div className="mt-2 space-y-0.5 text-[10px] md:text-xs">
                     {rows.map((r, i) => (
-                        <div key={`${r.label}-${i}`} className="flex justify-between gap-2">
-                            <span className="text-muted-foreground">{r.label}</span>
-                            <span className={`font-mono ${r.className ?? ''}`}>{r.value}</span>
+                        <div
+                            key={`${r.label}-${i}`}
+                            className="flex justify-between gap-2"
+                        >
+                            <span className="text-muted-foreground">
+                                {r.label}
+                            </span>
+                            <span
+                                className={`font-mono ${
+                                    r.strike
+                                        ? 'line-through text-muted-foreground'
+                                        : ''
+                                } ${r.className ?? ''}`}
+                            >
+                                {r.value}
+                            </span>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {saved && (
+                <div className="mt-2 text-[10px] md:text-xs font-mono text-emerald-600">
+                    экономия {saved}
                 </div>
             )}
         </Card>

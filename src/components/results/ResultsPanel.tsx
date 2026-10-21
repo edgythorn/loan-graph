@@ -11,10 +11,10 @@ export function ResultsPanel() {
   if (!session) return null
 
   return (
-    <Tabs defaultValue="schedule" className="mt-4">
+    <Tabs defaultValue="summary" className="mt-4">
       <TabsList>
-        <TabsTrigger value="schedule">График</TabsTrigger>
         <TabsTrigger value="summary">Сводка</TabsTrigger>
+        <TabsTrigger value="schedule">График платежей</TabsTrigger>
       </TabsList>
       <TabsContent value="schedule">
         <ScheduleTable result={session.result} />

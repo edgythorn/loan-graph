@@ -2,7 +2,7 @@
 
 [![Deploy](https://github.com/edgythorn/loan-graph/actions/workflows/deploy.yml/badge.svg)](https://github.com/edgythorn/loan-graph/actions/workflows/deploy.yml)
 
-**🔗 Live demo: [edgythorn.github.io/loan-graph](https://edgythorn.github.io/loan-graph/)** · **🔗 Рабочая версия: [edgythorn.github.io/loan-graph](https://edgythorn.github.io/loan-graph/)**
+**🔗 Live demo: [loan.work.gd](https://loan.work.gd/)** · **🔗 Рабочая версия: [loan.work.gd](https://loan.work.gd/)**
 
 [English](#english) · [Русский](#русский)
 

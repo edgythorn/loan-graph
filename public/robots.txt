@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /assets/
 
-Sitemap: https://edgythorn.github.io/loan-graph/sitemap.xml
+Sitemap: https://loan.work.gd/sitemap.xml
